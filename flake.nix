@@ -12,7 +12,11 @@
       specialArgs = { inherit inputs; };
       modules = [
         ./configuration.nix
+
 	./services/gitea.nix
+	./services/jellyfin.nix
+	./services/samba.nix
+
 	sops-nix.nixosModules.sops
       ];
     };
