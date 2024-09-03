@@ -1,0 +1,20 @@
+{
+  description = "Home server configuration";
+
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
+    sops-nix.url = "github:Mic92/sops-nix";
+  };
+
+  outputs = { self, nixpkgs, sops-nix, ... }@inputs: {
+    nixosConfigurations.Cloudsdale = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      specialArgs = { inherit inputs; };
+      modules = [
+        ./configuration.nix
+	./services/gitea.nix
+	sops-nix.nixosModules.sops
+      ];
+    };
+  };
+}
