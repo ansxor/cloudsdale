@@ -24,6 +24,15 @@
         "directory mask" = "0755";
         "force user" = "answer";
       };
+      jellyfin = {
+        path = "/home/jellyfin";
+        browseable = "yes";
+        "read only" = "no";
+        "guest ok" = "no";
+        "create mask" = "0644";
+        "directory mask" = "0755";
+        "force user" = "answer";
+      };
     };
   };
 }

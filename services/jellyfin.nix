@@ -3,6 +3,11 @@
   services.jellyfin = {
     enable = true;
     openFirewall = true;
-    user = "answer";
+  };
+
+  users.users.jellyfin = {
+    description = "Jellyfin";
+    isSystemUser = true;
+    home = "/home/jellyfin";
   };
 }
