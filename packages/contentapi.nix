@@ -1,13 +1,13 @@
 {
-  pkgs,
   fetchFromGitHub,
   dotnetCorePackages,
   buildDotnetModule,
   sqlite,
+  lib
 }:
 
 buildDotnetModule rec {
-  pname = "contentapi";
+  name = "contentapi";
 
   src = fetchFromGitHub {
     owner = "randomouscrap98";
@@ -22,9 +22,10 @@ buildDotnetModule rec {
   outputBin = "publish";
   framework = "net6.0";
 
-  meta = with pkgs.lib; {
+  nugetDeps = ./deps/contentapi.nix;
+
+  meta = with lib; {
     description = "ContentAPI";
     license = licenses.mit;
-    platforms = platforms.linux;
   };
 }

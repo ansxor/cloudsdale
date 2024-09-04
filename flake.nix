@@ -6,14 +6,22 @@
     sops-nix.url = "github:Mic92/sops-nix";
   };
 
-  outputs = { self, nixpkgs, sops-nix, ... }@inputs: {
-    localPackages = {
-      contentapi = import ./packages/contentapi.nix { inherit pkgs; };
+  outputs = { self, nixpkgs, sops-nix, ... }@inputs: 
+  let
+    system = "x86_64-linux";
+    pkgs = import nixpkgs {inherit system;};
+  in
+  {
+    packages.${system} = {
+      contentapi = pkgs.callPackage ./packages/contentapi.nix {};
     };
 
     nixosConfigurations.Cloudsdale = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      specialArgs = { inherit inputs; };
+      inherit system;
+      specialArgs = {
+        inherit inputs;
+	localPkgs = self.packages.${system};
+      };
       modules = [
         ./configuration.nix
 
