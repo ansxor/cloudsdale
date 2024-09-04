@@ -67,11 +67,6 @@ buildDotnetModule rec {
     done
   '';
 
-  postPatch = ''
-    # Update the appsettings.json file with the new database location
-    sed -i "s|\"Data Source=content.db\"|\"Data Source=${stateDir}/content.db\"|" $out/lib/appsettings.json
-  '';
-
   # Add a postInstall phase to run the migrations
   postInstall = ''
     mkdir -p $out/bin
@@ -85,5 +80,8 @@ buildDotnetModule rec {
       $DB_LOCATION/content.db \
       $DB_LOCATION/content.db.bak \
       $src/Deploy/dbmigrations
+
+    # Update the appsettings.json file with the new database location
+    sed -i "s|\"Data Source=content.db\"|\"Data Source=${stateDir}/content.db\"|" $out/lib/appsettings.json
   '';
 }
