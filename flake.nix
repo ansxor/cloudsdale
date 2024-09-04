@@ -16,6 +16,7 @@
 	./services/gitea.nix
 	./services/jellyfin.nix
 	./services/samba.nix
+	./services/caddy.nix
 
 	sops-nix.nixosModules.sops
       ];
