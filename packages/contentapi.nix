@@ -6,7 +6,7 @@
   lib,
   writeShellScript,
   bash,
-  stateDir ? "/var/lib/${name}"
+  stateDir ? "/var/lib/contentapi"
 }:
 
 buildDotnetModule rec {
@@ -69,7 +69,7 @@ buildDotnetModule rec {
 
   postPatch = ''
     # Update the appsettings.json file with the new database location
-    sed -i "s|\"Data Source=content.db\"|\"Data Source=${stateDir}/content.db\"|" appsettings.json
+    sed -i "s|\"Data Source=content.db\"|\"Data Source=${stateDir}/content.db\"|" $out/lib/appsettings.json
   '';
 
   # Add a postInstall phase to run the migrations
