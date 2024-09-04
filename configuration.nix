@@ -110,6 +110,7 @@
     age
     sops
     git
+    contentapi
   #  wget
   ];
 

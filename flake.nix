@@ -7,6 +7,10 @@
   };
 
   outputs = { self, nixpkgs, sops-nix, ... }@inputs: {
+    localPackages = {
+      contentapi = import ./packages/contentapi.nix { inherit pkgs; };
+    };
+
     nixosConfigurations.Cloudsdale = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = { inherit inputs; };
