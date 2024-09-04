@@ -5,7 +5,8 @@
   sqlite,
   lib,
   writeShellScript,
-  bash
+  bash,
+  stateDir ? "/var/lib/${name}"
 }:
 
 buildDotnetModule rec {
@@ -66,6 +67,11 @@ buildDotnetModule rec {
     done
   '';
 
+  postPatch = ''
+    # Update the appsettings.json file with the new database location
+    sed -i "s|\"Data Source=content.db\"|\"Data Source=${stateDir}/content.db\"|" appsettings.json
+  '';
+
   # Add a postInstall phase to run the migrations
   postInstall = ''
     mkdir -p $out/bin
@@ -73,7 +79,7 @@ buildDotnetModule rec {
     chmod +x $out/bin/run-migrations.sh
 
     # Run the migrations
-    DB_LOCATION=$out/share/${name}
+    DB_LOCATION=${stateDir}
     mkdir -p $DB_LOCATION
     ${bash}/bin/bash $out/bin/run-migrations.sh \
       $DB_LOCATION/content.db \
