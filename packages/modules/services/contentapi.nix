@@ -40,6 +40,12 @@ in
 
   config = mkIf cfg.enable {
     systemd = {
+      tmpfiles.settings.contentapiDirs = {
+        "${cfg.workingDir}"."d" = {
+	  mode = "700";
+	  inherit (cfg) user group;
+	};
+      };
       services.contentapi = {
         enable = true;
         description = "ContentAPI";
@@ -53,7 +59,7 @@ in
           User = cfg.user;
 	  Group = cfg.group;
 	  WorkingDirectory = cfg.workingDir;
-	  ExecStart = "${getExe cfg.package} --urls 'http://localhost:${cfg.port}'";
+	  ExecStart = "${getExe cfg.package} --urls 'http://localhost:${toString cfg.port}'";
 	};
       };
     };

@@ -32,6 +32,7 @@ buildDotnetModule rec {
     description = "ContentAPI";
     license = licenses.mit;
     platforms = platforms.linux;
+    mainProgram = "contentapi";
   };
 
   
