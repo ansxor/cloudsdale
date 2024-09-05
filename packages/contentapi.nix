@@ -6,7 +6,6 @@
   lib,
   writeShellScript,
   bash,
-  stateDir ? "/var/lib/contentapi"
 }:
 
 buildDotnetModule rec {
@@ -74,7 +73,7 @@ buildDotnetModule rec {
     chmod +x $out/bin/run-migrations.sh
 
     # Run the migrations
-    DB_LOCATION=${stateDir}
+    DB_LOCATION=$out/share/contentapi
     mkdir -p $DB_LOCATION
     ${bash}/bin/bash $out/bin/run-migrations.sh \
       $DB_LOCATION/content.db \
@@ -82,6 +81,7 @@ buildDotnetModule rec {
       $src/Deploy/dbmigrations
 
     # Update the appsettings.json file with the new database location
-    sed -i "s|\"Data Source=content.db\"|\"Data Source=${stateDir}/content.db\"|" $out/lib/appsettings.json
+    sed -i "s|\"Data Source=content.db\"|\"Data Source=$out/share/contentapi/content.db\"|" $out/lib/appsettings.json
+    sed -i "s|\"Data Source=valuestore.db\"|\"Data Source=$out/share/contentapi/valuestore.db\"|" $out/lib/appsettings.json
   '';
 }
