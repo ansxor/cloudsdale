@@ -66,7 +66,10 @@ in
 	  '';
 	};
 	environment = {
-	  WEBROOT = "${cfg.package}/lib/contentapi/wwwroot";
+	  WEBROOT = "${cfg.package}/lib/wwwroot";
+
+	  Logging__LogLevel__Default = "Debug";
+	  "Logging__LogLevel__Microsoft.AspNetCore" = "Debug";
 	};
       };
     };
