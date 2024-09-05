@@ -59,7 +59,11 @@ in
           User = cfg.user;
 	  Group = cfg.group;
 	  WorkingDirectory = cfg.workingDir;
-	  ExecStart = "${getExe cfg.package} --urls 'http://localhost:${toString cfg.port}'";
+	  ExecStart = "${getExe cfg.package} --urls 'http://127.0.0.1:${toString cfg.port}'";
+	  ExecStartPre = ''
+	    ${cfg.package}/bin/contentapi-migrate /var/lib/contentapi/content.db /var/lib/contentapi/content.db.bak &&
+	    test -f /var/lib/contentapi/appsettings.json || cp ${cfg.package}/share/doc/contentapi/appsettings.json /var/lib/contentapi/
+	  '';
 	};
       };
     };

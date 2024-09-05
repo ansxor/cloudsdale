@@ -16,7 +16,7 @@
     };
 
     virtualHosts."content.shy.home.arpa" = {
-      locations."/".proxyPass = "http://localhost:5000";
+      locations."/".proxyPass = "http://127.0.0.1:5000";
     };
   };
 }
