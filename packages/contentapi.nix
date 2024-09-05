@@ -41,7 +41,6 @@ buildDotnetModule rec {
 
     DB=''${1:-content.db}
     BACKUP=''${2:-content.db.bak}
-    DBMIGRATIONS=$out/share/${name}/dbmigrations
 
     DB_DIR=$(dirname $DB)
 
@@ -76,9 +75,11 @@ buildDotnetModule rec {
     mkdir -p $out/bin
     cp ${migrationScript} $out/bin/contentapi-migrate
     chmod +x $out/bin/contentapi-migrate
+    wrapProgram $out/bin/contentapi-migrate --prefix PATH : ${sqlite}/bin --set DBMIGRATIONS $out/share/${name}/dbmigrations
 
     # Put the default appsettings.json somewhere where it is easy to find
     # the appsettings.json must be put into the working directory of the program
     mkdir -p $out/share/doc/${name}
+    cp $src/contentapi/appsettings.json $out/share/doc/${name}
   '';
 }

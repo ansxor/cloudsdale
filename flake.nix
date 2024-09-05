@@ -25,10 +25,13 @@
       modules = [
         ./configuration.nix
 
+	./packages/modules/services/contentapi.nix
+
 	./services/gitea.nix
 	./services/jellyfin.nix
 	./services/samba.nix
 	./services/nginx.nix
+	./services/contentapi.nix
 
 	sops-nix.nixosModules.sops
       ];
