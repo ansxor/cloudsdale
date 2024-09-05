@@ -65,6 +65,9 @@ in
 	    test -f /var/lib/contentapi/appsettings.json || cp ${cfg.package}/share/doc/contentapi/appsettings.json /var/lib/contentapi/
 	  '';
 	};
+	environment = {
+	  WEBROOT = "${cfg.package}/lib/contentapi/wwwroot";
+	};
       };
     };
 
