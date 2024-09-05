@@ -36,12 +36,12 @@ buildDotnetModule rec {
 
   
   # Add the migration script
-  migrationScript = writeShellScript "run-migrations.sh" ''
+  migrationScript = writeShellScript "contentapi-migrate" ''
     set -e
 
     DB=''${1:-content.db}
     BACKUP=''${2:-content.db.bak}
-    DBMIGRATIONS=''${3:-dbmigrations}
+    DBMIGRATIONS=$out/share/${name}/dbmigrations
 
     DB_DIR=$(dirname $DB)
 
@@ -68,20 +68,17 @@ buildDotnetModule rec {
 
   # Add a postInstall phase to run the migrations
   postInstall = ''
+    # Put the migrations somewhere where we can use them
+    mkdir -p $out/share/${name}
+    cp -r $src/Deploy/dbmigrations $out/share/${name}
+
+    # make a script to handle migrations
     mkdir -p $out/bin
-    cp ${migrationScript} $out/bin/run-migrations.sh
-    chmod +x $out/bin/run-migrations.sh
+    cp ${migrationScript} $out/bin/contentapi-migrate
+    chmod +x $out/bin/contentapi-migrate
 
-    # Run the migrations
-    DB_LOCATION=$out/share/contentapi
-    mkdir -p $DB_LOCATION
-    ${bash}/bin/bash $out/bin/run-migrations.sh \
-      $DB_LOCATION/content.db \
-      $DB_LOCATION/content.db.bak \
-      $src/Deploy/dbmigrations
-
-    # Update the appsettings.json file with the new database location
-    sed -i "s|\"Data Source=content.db\"|\"Data Source=$out/share/contentapi/content.db\"|" $out/lib/appsettings.json
-    sed -i "s|\"Data Source=valuestore.db\"|\"Data Source=$out/share/contentapi/valuestore.db\"|" $out/lib/appsettings.json
+    # Put the default appsettings.json somewhere where it is easy to find
+    # the appsettings.json must be put into the working directory of the program
+    mkdir -p $out/share/doc/${name}
   '';
 }
