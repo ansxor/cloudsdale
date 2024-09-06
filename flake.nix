@@ -34,6 +34,7 @@
 	./services/samba.nix
 	./services/nginx.nix
 	./services/contentapi.nix
+	./services/sbs2.nix
 
 	sops-nix.nixosModules.sops
       ];

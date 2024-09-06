@@ -15,20 +15,23 @@ let
   };
 in
 {
-  system.activationScripts.buildScript = ''
-    if [ -d "${repoDir}" ]; then
-      cd "${repoDir}"
-      ${pkgs.writeShellScript "build.sh" ''
-        #!/bin/sh
-	./admin/build.sh
-      ''}
-    fi
-  '';
+  config = {
+    systemd.services.build-script = {
+      description = "Build script for SBS2";
+      script = ''
+        cd  "${repoDir}"
+        ./admin/build.sh
+      '';
+      wantedBy = [ "multi-user.target" ];
+    };
 
-  system.activationScripts.copyResults = ''
-    if [ -d "${repoDir}" ]; then
-      cp -r "${repoDir}/_build.html "${outputDir}/index.html"
-      cp -r "${repoDir}/resources" "${outputDir}"
-    fi
-  '';
+    systemd.services.copy-results = {
+      description = "Copy builkd results to output directory";
+      script = ''
+        cp -r "${repoDir}/_build.html "${outputDir}/index.html"
+        cp -r "${repoDir}/resources" "${outputDir}"
+      '';
+      wantedBy = [ "multi-user.target" ];
+    };
+  };
 }
