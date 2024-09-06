@@ -34,15 +34,11 @@ in
   };
 
   config = {
-    systemd.tmpfiles.settings.sbs2Rules = {
-      "${cfg.outputDir}"."d" = {
-        mode = "755";
-	user = "www-data";
-	group = "www-data";
-      };
-    };
+    systemd.tmpfiles.rules = [
+      "d ${cfg.outputDir} 0755 sbs2 www-data -"
+    ];
     systemd.services.build-and-copy = {
-      description = "Copy builkd results to output directory";
+      description = "Copy build results to output directory";
       script = ''
         repoDir=$(mktemp -d)
 
@@ -56,11 +52,17 @@ in
 	./admin/build.sh
 
         # Copy the results to the output directory
-        cp -r $repoDir/_build.html ${cfg.outputDir}
+        cp -r $repoDir/_build.html ${cfg.outputDir}/index.html
         cp -r $repoDir/resource ${cfg.outputDir}
       '';
       wantedBy = [ "multi-user.target" ];
-      confinement.packages = [ pkgs.git ];
     };
+
+    users.users.sbs2 = {
+      group = "www-data";
+      isSystemUser = true;
+    };
+
+    users.groups.www-data = {};
   };
 }
