@@ -12,6 +12,8 @@
     pkgs = import nixpkgs {inherit system;};
   in
   {
+    nixosModules.sbs2 = import ./modules/sbs2.nix;
+
     packages.${system} = {
       contentapi = pkgs.callPackage ./packages/contentapi.nix {};
     };
@@ -25,7 +27,13 @@
       modules = [
         ./configuration.nix
 
-	./modules/sbs2.nix
+        self.nixosModules.sbs2
+	{
+	  sbs2 = {
+	    apiDomain = "content.shy.home.arpa";
+	    apiSecure = false;
+	  };
+	}
 
 	./packages/modules/services/contentapi.nix
 

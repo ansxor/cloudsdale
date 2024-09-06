@@ -45,6 +45,11 @@ in
         # Clone the repository to the temporary directory
 	cp -rT ${repo} $repoDir
 
+        ${lib.optionalString (!cfg.apiSecure) ''
+	  sed -i "s/https/http/g" $repoDir/src/request.js
+	  sed -i "s/wss/ws/g" $repoDir/src/socket.js
+	''}
+	sed -i 's/qcs.shsbs.xyz/${cfg.apiDomain}/g' $repoDir/src/request.js
 	sed -i 's/git/${gitPath}/g' $repoDir/admin/build.sh
 
         # Run the build script

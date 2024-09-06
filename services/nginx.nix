@@ -17,7 +17,10 @@
 
     virtualHosts."content.shy.home.arpa" = {
       locations = {
-        "~ ^/api".proxyPass = "http://127.0.0.1:5000";
+        "~ ^/api" = {
+	  proxyPass = "http://127.0.0.1:5000";
+	  proxyWebsockets = true;
+	};
         "/".root = "/var/www/sbs2";
       };
     };
