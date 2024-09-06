@@ -4,6 +4,114 @@ let
   inherit (lib) mkIf getExe maintainers mkEnableOption mkOption mkPackageOption;
   inherit (lib.types) str path bool int;
   cfg = config.services.contentapi;
+
+  appsettingsJson = pkgs.writeText "appsettings.json" (builtins.toJSON {
+	      Logging = {
+	        LogLevel = {
+	          Default = "Debug";
+	          "Microsoft.AspNetCore" = "Warning";
+	        };
+	      };
+	      AWS = {
+	        Profile = "yourawsprofile(onlyifs3)";
+	        Region = "your-s3-region";
+	      };
+	      RateLimitConfig = {
+	        Rates = {
+	          write = "5,5";
+	          login = "3,10";
+	          interact = "5,5";
+	          file = "2,10";
+	          module = "10,10";
+	          uservariable = "30,10";
+	        };
+	      };
+	      SecretKey = "PLEASEREPLACETHISWHENTESTINGORDEPLOYGIN!THISKEYISPUBLIC!";
+	      StaticPath = "/api/run";
+	      AllowedHosts = "*";
+	      CacheCheckpointTrackerConfig = {
+	        CacheIdIncrement = 10;
+	      };
+	      UserServiceConfig = {
+	        UsernameRegex = "^[^\\s,|%*]+$";
+	        MinUsernameLength = 2;
+	        MaxUsernameLength = 20;
+	        MinPasswordLength = 8;
+	        MaxPasswordLength = 160;
+	      };
+	      QueryBuilderConfig = {
+	        ExpensiveMax = 2;
+	      };
+	      ConnectionStrings = {
+	        contentapi = "Data Source=content.db";
+	        storage = "Data Source=valuestore.db";
+	      };
+	      GenericSearcherConfig = {
+	        MaxIndividualResultSet = 1000;
+	        LogSql = false;
+	      };
+	      EmailSender = "file";
+              ImageManipulator = "direct";
+	      FileServiceConfig = {
+	        MainLocation = "uploads";
+	        ThumbnailLocation = "thumbnails";
+	        TempLocation = "tempfiles";
+	        QuantizerProgram = null;
+	        EnableUploads = true;
+	        DefaultImageFallback = "iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAIAAAACDbGyAAAAIklEQVQI12P8//8/AxJgYmBgYGRkRJBo8gzI/P///6PLAwAuoA79WVXllAAAAABJRU5ErkJggg==";
+	      };
+	      ImageManipulator_IMagickConfig = {
+	        TempPath = "tempfiles";
+	        IMagickPath = "/usr/bin/convert";
+	      };
+	      OcrCrawlConfig = {
+	        Program = "none";
+	        Interval = "00:01:00";
+	        ProcessPerInterval = 10;
+	        OcrValueKey = "ocr-crawl";
+	        OcrFailKey = "ocr-fail";
+	        PullOrder = "id_desc";
+	        TempLocation = "tempfiles";
+	      };
+	      BlogGeneratorConfig = {
+	        Interval = "00:00:00";
+	        BlogsFolder = "blogs";
+	        StaticFilesBase = "wwwroot";
+	        ScriptIncludes = [
+	          "markup/parse.js"
+	          "markup/render.js"
+	          "markup/langs.js"
+	          "markup/legacy.js"
+	          "markup/helpers.js"
+	          "bloggen.js"
+	        ];
+	      };
+	      UserControllerConfig = {
+	        BackdoorRegistration = false;
+	        BackdoorSuper = false;
+	        AccountCreationEnabled = true;
+	        ConfirmationType = "Instant";
+	      };
+	      LiveControllerConfig = {
+	        AnonymousToken = "SOME_TOKEN_FOR_ANONYMOUS_WEBSOCKET_LISTEN";
+	      };
+	      EmailConfig = {
+	        Host = "somewherelikegmail.smtp.etc";
+	        Sender = "sender@email.com";
+	        User = "youruseraccountname";
+	        Password = "plaintextpasswordforemail";
+	        Port = 1234;
+	        SubjectFront = "Something to append to all subjects if desired";
+	      };
+	      FileEmailServiceConfig = {
+	        Folder = "emails";
+	      };
+	      StatusControllerConfig = {
+	        Repo = "https://github.com/randomouscrap98/contentapi";
+	        BugReports = "https://github.com/randomouscrap98/contentapi/issues";
+	        Contact = "smilebasicsource@gmail.com";
+	      };
+  });
 in
 {
   options = {
@@ -60,10 +168,10 @@ in
 	  Group = cfg.group;
 	  WorkingDirectory = cfg.workingDir;
 	  ExecStart = "${getExe cfg.package} --urls 'http://*:${toString cfg.port}'";
-	  ExecStartPre = ''
-	    ${cfg.package}/bin/contentapi-migrate /var/lib/contentapi/content.db /var/lib/contentapi/content.db.bak &&
-	    test -f /var/lib/contentapi/appsettings.json || cp ${cfg.package}/share/doc/contentapi/appsettings.json /var/lib/contentapi/
-	  '';
+	  ExecStartPre = [
+	    "${cfg.package}/bin/contentapi-migrate ${cfg.workingDir}/content.db ${cfg.workingDir}/content.db.bak"
+	    "${pkgs.coreutils}/bin/cp ${appsettingsJson} ${cfg.workingDir}/appsettings.json"
+	  ];
 	};
       };
     };
