@@ -65,12 +65,6 @@ in
 	    test -f /var/lib/contentapi/appsettings.json || cp ${cfg.package}/share/doc/contentapi/appsettings.json /var/lib/contentapi/
 	  '';
 	};
-	environment = {
-	  WEBROOT = "${cfg.package}/lib/wwwroot";
-
-	  Logging__LogLevel__Default = "Debug";
-	  "Logging__LogLevel__Microsoft.AspNetCore" = "Debug";
-	};
       };
     };
 

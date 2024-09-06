@@ -25,6 +25,8 @@
       modules = [
         ./configuration.nix
 
+	./modules/sbs2.nix
+
 	./packages/modules/services/contentapi.nix
 
 	./services/gitea.nix

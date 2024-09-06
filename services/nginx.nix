@@ -16,7 +16,10 @@
     };
 
     virtualHosts."content.shy.home.arpa" = {
-      locations."/".proxyPass = "http://127.0.0.1:5000";
+      locations = {
+        "~ ^/api".proxyPass = "http://127.0.0.1:5000";
+        "/".root = "/var/lib/contentapi/wwwroot";
+      };
     };
   };
 }
