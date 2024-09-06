@@ -5,8 +5,8 @@ let
   repo = pkgs.fetchFromGitHub {
     owner = "12Me21";
     repo = "sbs2";
-    rev = "ff6bfbfef0ee8fc6c7608ea3b4b20c4a54529642";
-    sha256 = "sha256-e/eWb2tfFBskRtora6R9l8/opD/PqnRXqEKWe/GFugE=";
+    rev = "43d5703b8dda066420b3f41d7ac33da53c9de966";
+    sha256 = "sha256-1LllOM7NHksjVtYMaMypn7PT6CQzcn78ub0pWRkx3Uc=";
     fetchSubmodules = true;
     deepClone = true;
     leaveDotGit = true;
@@ -16,17 +16,29 @@ let
 in
 {
   options.sbs2.outputDir = lib.mkOption {
-    type = lib.types.str;
+    type = lib.types.path;
     default = "/var/www/sbs2";
     description = "Directory where SBS2 build files will be put.";
+  };
+
+  options.sbs2.apiDomain = lib.mkOption {
+    type = lib.types.str;
+    default = "qcs.shsbs.xyz";
+    description = "Domain where the ContentAPI instance lives.";
+  };
+
+  options.sbs2.apiSecure = lib.mkOption {
+    type = lib.types.bool;
+    default = true;
+    description = "Where the location where the ContentAPI instance lives is secure.";
   };
 
   config = {
     systemd.tmpfiles.settings.sbs2Rules = {
       "${cfg.outputDir}"."d" = {
         mode = "755";
-	user = "root";
-	group = "root";
+	user = "www-data";
+	group = "www-data";
       };
     };
     systemd.services.build-and-copy = {
@@ -45,7 +57,7 @@ in
 
         # Copy the results to the output directory
         cp -r $repoDir/_build.html ${cfg.outputDir}
-        cp -r $repoDir/resources ${cfg.outputDir}
+        cp -r $repoDir/resource ${cfg.outputDir}
       '';
       wantedBy = [ "multi-user.target" ];
       confinement.packages = [ pkgs.git ];
