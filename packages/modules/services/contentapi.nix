@@ -112,6 +112,16 @@ let
 	        Contact = "smilebasicsource@gmail.com";
 	      };
   });
+  webrootSetupScript = pkgs.writeShellScript "contentapi-webrootsetup.sh" ''
+    set -e
+
+    if [ ! -d "$1/wwwroot" ]; then
+      mkdir -p "$1/wwwroot"
+      cp -r "$2/lib/wwwroot/"* "$1/wwwroot/"
+      chown -R "$3:$3" "$1/wwwroot"
+      chmod -R 0750 "$1/wwwroot"
+    fi
+  '';
 in
 {
   options = {
@@ -170,8 +180,14 @@ in
 	  ExecStart = "${getExe cfg.package} --urls 'http://*:${toString cfg.port}'";
 	  ExecStartPre = [
 	    "${cfg.package}/bin/contentapi-migrate ${cfg.workingDir}/content.db ${cfg.workingDir}/content.db.bak"
+	    "${pkgs.coreutils}/bin/rm ${cfg.workingDir}/appsettings.json"
 	    "${pkgs.coreutils}/bin/cp ${appsettingsJson} ${cfg.workingDir}/appsettings.json"
+	    "${webrootSetupScript} ${cfg.workingDir} ${cfg.package} ${cfg.user} ${cfg.group}"
 	  ];
+	};
+
+	environment = {
+	  WEBROOT = "${cfg.package}/lib/wwwroot";
 	};
       };
     };
