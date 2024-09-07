@@ -111,6 +111,7 @@
     sops
     git
     localPkgs.contentapi
+    localPkgs.jellyfin-media-adder
   #  wget
   ];
 

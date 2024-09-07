@@ -1,17 +1,35 @@
 {
   "nodes": {
+    "jellyfin-media-adder": {
+      "inputs": {
+        "nixpkgs": "nixpkgs"
+      },
+      "locked": {
+        "lastModified": 1725726156,
+        "narHash": "sha256-jfEPPywDGojYhMMRk1YgzbPOtJIxTaOc+FifPfAegGo=",
+        "ref": "refs/heads/main",
+        "rev": "74f1c10da8a227f9d530f643b44631e43529c5f9",
+        "revCount": 7,
+        "type": "git",
+        "url": "http://git.shy.home.arpa/answer/jellyfin-media-adder.git"
+      },
+      "original": {
+        "type": "git",
+        "url": "http://git.shy.home.arpa/answer/jellyfin-media-adder.git"
+      }
+    },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1725001927,
-        "narHash": "sha256-eV+63gK0Mp7ygCR0Oy4yIYSNcum2VQwnZamHxYTNi+M=",
+        "lastModified": 1725432240,
+        "narHash": "sha256-+yj+xgsfZaErbfYM3T+QvEE2hU7UuE+Jf0fJCJ8uPS0=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "6e99f2a27d600612004fbd2c3282d614bfee6421",
+        "rev": "ad416d066ca1222956472ab7d0555a6946746a80",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
-        "ref": "nixos-24.05",
+        "ref": "nixos-unstable",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -34,6 +52,22 @@
     },
     "nixpkgs_2": {
       "locked": {
+        "lastModified": 1725001927,
+        "narHash": "sha256-eV+63gK0Mp7ygCR0Oy4yIYSNcum2VQwnZamHxYTNi+M=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "6e99f2a27d600612004fbd2c3282d614bfee6421",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-24.05",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_3": {
+      "locked": {
         "lastModified": 1721466660,
         "narHash": "sha256-pFSxgSZqZ3h+5Du0KvEL1ccDZBwu4zvOil1zzrPNb3c=",
         "owner": "NixOS",
@@ -50,13 +84,14 @@
     },
     "root": {
       "inputs": {
-        "nixpkgs": "nixpkgs",
+        "jellyfin-media-adder": "jellyfin-media-adder",
+        "nixpkgs": "nixpkgs_2",
         "sops-nix": "sops-nix"
       }
     },
     "sops-nix": {
       "inputs": {
-        "nixpkgs": "nixpkgs_2",
+        "nixpkgs": "nixpkgs_3",
         "nixpkgs-stable": "nixpkgs-stable"
       },
       "locked": {

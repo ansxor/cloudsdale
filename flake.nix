@@ -4,7 +4,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
     sops-nix.url = "github:Mic92/sops-nix";
-    jellyfin-media-adder.url = "path:./repos/jellyfin-media-adder";
+    jellyfin-media-adder.url = "git+http://git.shy.home.arpa/answer/jellyfin-media-adder.git";
   };
 
   outputs = { self, nixpkgs, sops-nix, jellyfin-media-adder, ... }@inputs: 
