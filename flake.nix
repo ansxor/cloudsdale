@@ -4,10 +4,10 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
     sops-nix.url = "github:Mic92/sops-nix";
-    jellyfin-media-adder.url = "";
+    jellyfin-media-adder.url = "path:./repos/jellyfin-media-adder";
   };
 
-  outputs = { self, nixpkgs, sops-nix, ... }@inputs: 
+  outputs = { self, nixpkgs, sops-nix, jellyfin-media-adder, ... }@inputs: 
   let
     system = "x86_64-linux";
     pkgs = import nixpkgs {inherit system;};
@@ -17,6 +17,7 @@
 
     packages.${system} = {
       contentapi = pkgs.callPackage ./packages/contentapi.nix {};
+      jellyfin-media-adder = jellyfin-media-adder.defaultPackage.${system};
     };
 
     nixosConfigurations.Cloudsdale = nixpkgs.lib.nixosSystem {
