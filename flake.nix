@@ -17,7 +17,7 @@
 
     packages.${system} = {
       contentapi = pkgs.callPackage ./packages/contentapi.nix {};
-      jellyfin-media-adder = jellyfin-media-adder.defaultPackage.${system};
+      jellyfin-media-adder = jellyfin-media-adder.packages.${system}.default;
     };
 
     nixosConfigurations.Cloudsdale = nixpkgs.lib.nixosSystem {
@@ -38,12 +38,14 @@
 	}
 
 	./packages/modules/services/contentapi.nix
+	./modules/jellyfin-media-adder.nix
 
 	./services/gitea.nix
 	./services/jellyfin.nix
 	./services/samba.nix
-	./services/nginx.nix
+	./services/caddy.nix
 	./services/contentapi.nix
+	./services/jellyfin-media-adder.nix
 
 	sops-nix.nixosModules.sops
       ];
