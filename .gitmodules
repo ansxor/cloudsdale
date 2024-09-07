@@ -1,0 +1,3 @@
+[submodule "repos/jellyfin-media-adder"]
+	path = repos/jellyfin-media-adder
+	url = http://git.shy.home.arpa/answer/jellyfin-media-adder.git
