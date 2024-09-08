@@ -25,12 +25,5 @@
     virtualHosts."http://jellyfin-media-adder.shy.home.arpa".extraConfig = ''
       reverse_proxy http://localhost:8000
     '';
-    
-    virtualHosts."http://cert.shy.home.arpa".extraConfig = ''
-      handle /root.crt {
-        root * /var/lib/caddy/.local/share/caddy/pki/authorities/local
-	file_server
-      }
-    '';
   };
 }
