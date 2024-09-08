@@ -22,13 +22,7 @@
       file_server
     '';
 
-    virtualHosts."jellyfin-media-adder.shy.home.arpa".extraConfig = ''
-      tls internal
-      rewrite /ca.crt /var/lib/caddy/.local/share/caddy/certificates/local/jellyfin-media-adder.shy.home.arpa/jellyfin-media-adder.shy.home.arpa.crt
-      handle /ca.crt {
-	root * /var/lib/caddy/.local/share/caddy/certificates/local/jellyfin-media-adder.shy.home.arpa
-	file_server
-      }
+    virtualHosts."http://jellyfin-media-adder.shy.home.arpa".extraConfig = ''
       reverse_proxy http://localhost:8000
     '';
     
