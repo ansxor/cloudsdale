@@ -5,15 +5,16 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1725726156,
-        "narHash": "sha256-jfEPPywDGojYhMMRk1YgzbPOtJIxTaOc+FifPfAegGo=",
+        "lastModified": 1725808994,
+        "narHash": "sha256-BY7JxzuJHg6jGkjBKmqO5XyvY6kjv3AxkX623AdrVFQ=",
         "ref": "refs/heads/main",
-        "rev": "74f1c10da8a227f9d530f643b44631e43529c5f9",
-        "revCount": 7,
+        "rev": "d7b53fa67b0e656a2489f3b9efb442bedd5569a4",
+        "revCount": 13,
         "type": "git",
         "url": "http://git.shy.home.arpa/answer/jellyfin-media-adder.git"
       },
       "original": {
+        "rev": "d7b53fa67b0e656a2489f3b9efb442bedd5569a4",
         "type": "git",
         "url": "http://git.shy.home.arpa/answer/jellyfin-media-adder.git"
       }

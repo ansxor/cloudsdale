@@ -34,12 +34,36 @@ in
       default = 8000;
       description = "Exposed port for Jellyfin Media Adder";
     };
+
+    jellyfinServer = mkOption {
+      type = str;
+      default = "localhost:8096";
+      description = "Jellyfin server location.";
+    };
+
+    jellyfinUsername = mkOption {
+      type = str;
+      default = "admin";
+      description = "User account that the Jellyfin Media Runner signs in under";
+    };
+
+    jellyfinPassword = mkOption {
+      type = str;
+      default = "admin";
+      description = "Password for user account that the Jellyfin Media Runner signs in under";
+    };
+
+    jellyfinLibraryId = mkOption {
+      type = str;
+      default = "PLEASE_INSERT_LIBRARY_ID_HERE";
+      description = "Library item ID to be refreshed when new entries are added.";
+    };
   };
 
   config = mkIf cfg.enable {
     systemd.services.jellyfin-media-adder = {
       enable = true;
-      description = "ContentAPI";
+      description = "Jellyfin Media Adder";
 
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
@@ -54,18 +78,23 @@ in
 
       environment = {
         OUTPUT_DIR = cfg.outputDir;
+
+	JELLYFIN_SERVER = cfg.jellyfinServer;
+	JELLYFIN_USERNAME = cfg.jellyfinUsername;
+	JELLYFIN_PASSWORD = cfg.jellyfinPassword;
+	JELLYFIN_MUSIC_LIBRARY = cfg.jellyfinLibraryId;
       };
     };
 
     users.users = mkIf (cfg.user == "jellyfin-media-adder") {
-      contentapi = {
+      jellyfin-media-adder = {
         inherit (cfg) group;
 	isSystemUser = true;
       };
     };
 
     users.groups = mkIf (cfg.group == "jellyfin-media-adder") {
-      contentapi = {};
+      jellyfin-media-adder = {};
     };
   };
 }

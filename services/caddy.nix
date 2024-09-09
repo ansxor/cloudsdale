@@ -16,7 +16,9 @@
     '';
 
     virtualHosts."http://content.shy.home.arpa".extraConfig = ''
-      reverse_proxy /api http://127.0.0.1:5000
+      route /api/* {
+        reverse_proxy http://localhost:5000
+      }
 
       root * /var/www/sbs2
       file_server
